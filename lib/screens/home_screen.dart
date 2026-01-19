@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:medtrack/app/routes.dart';
 import 'package:medtrack/screens/add_medicine_screen.dart';
-import 'package:medtrack/screens/alarm_screen.dart';
 import 'package:medtrack/screens/widgets/empty_state.dart';
 import 'package:medtrack/screens/widgets/medicine_card.dart';
 import 'package:medtrack/utils/constants.dart';
@@ -16,25 +16,9 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Medicine Reminder',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          'MediTrack',
+          style: TextStyle(fontFamily: 'cursive', fontWeight: FontWeight.w800, fontSize: 26),
         ),
-        elevation: 0,
-        actions: [
-          // Debug/Test button
-          IconButton(
-            icon: const Icon(Icons.bug_report),
-            tooltip: 'Test Alarms',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const AlarmTestScreen(),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Consumer<MedicineViewModel>(
         builder: (context, viewModel, child) {
@@ -66,10 +50,7 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const AddMedicineScreen()),
-          );
+          Navigator.of(context).pushNamed(AppRoutes.addMedicine);
         },
         backgroundColor: AppColors.accentOrange,
         icon: const Icon(Icons.add),

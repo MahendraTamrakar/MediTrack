@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Primary Color - Teal
   static const Color primaryTeal = Color(0xFF008080);
   static const Color primaryTealLight = Color(0xFF4DB8B8);
   static const Color primaryTealDark = Color(0xFF005757);
 
-  // Accent Color - Orange
   static const Color accentOrange = Color(0xFFFF6B35);
   static const Color accentOrangeLight = Color(0xFFFF8C61);
   static const Color accentOrangeDark = Color(0xFFCC5528);
 
-  // Neutral Colors
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
   static const Color grey = Color(0xFF9E9E9E);

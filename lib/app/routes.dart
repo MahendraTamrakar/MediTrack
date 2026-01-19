@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medtrack/screens/add_medicine_screen.dart';
 import 'package:medtrack/screens/home_screen.dart';
 
 class AppRoutes {
@@ -10,7 +11,7 @@ class AppRoutes {
       case home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case addMedicine:
-        //return MaterialPageRoute(builder: (_) => const AddMedicineScreen());
+        return MaterialPageRoute(builder: (_) => const AddMedicineScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

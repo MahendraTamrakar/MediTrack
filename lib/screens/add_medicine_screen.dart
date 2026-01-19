@@ -66,7 +66,6 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
     _selectedTime,
   );
 
-  // ⭐ ADD THIS DEBUG LOG
   debugPrint('🕐 Scheduling medicine for: $scheduledTime');
   debugPrint('🕐 Current time: ${DateTime.now()}');
   debugPrint('🕐 Time difference: ${scheduledTime.difference(DateTime.now()).inMinutes} minutes');
@@ -115,7 +114,10 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 decoration: InputDecoration(
                   labelText: 'Medicine Name',
                   hintText: 'e.g., Aspirin',
-                  prefixIcon: const Icon(Icons.medical_services),
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('assets/medicine.png', height: 25, width: 25),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -140,7 +142,10 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
                 decoration: InputDecoration(
                   labelText: 'Dosage',
                   hintText: 'e.g., 500mg or 2 tablets',
-                  prefixIcon: const Icon(Icons.local_pharmacy),
+                 prefixIcon: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset('assets/drugs.png', height: 25, width: 25),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -163,14 +168,14 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
               InkWell(
                 onTap: _selectTime,
                 child: Container(
-                  padding: const EdgeInsets.all(16),
+                  padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 14),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.access_time, color: AppColors.primaryTeal),
+                      Image.asset('assets/timer.png', height: 30 ,width: 30,),
                       const SizedBox(width: 12),
                       Text(
                         'Time: ${_selectedTime.format(context)}',

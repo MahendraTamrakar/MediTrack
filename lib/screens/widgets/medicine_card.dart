@@ -26,14 +26,10 @@ class MedicineCard extends StatelessWidget {
         leading: Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: AppColors.primaryTeal.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
+            color: const Color.fromARGB(72, 0, 128, 128),
+            borderRadius: BorderRadius.circular(20),
           ),
-          child: Icon(
-            Icons.medication,
-            color: AppColors.primaryTeal,
-            size: 28,
-          ),
+          child: Image.asset('assets/medicine.png', fit:BoxFit.contain ,)
         ),
         title: Text(
           medicine.name,

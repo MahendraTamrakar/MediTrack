@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:medtrack/app/routes.dart';
 import 'package:medtrack/core/theme.dart';
-import 'package:medtrack/screens/home_screen.dart';
+import 'package:medtrack/services/notification_service.dart';
 
 class MedicineReminderApp extends StatefulWidget {
   const MedicineReminderApp({super.key});
@@ -16,7 +17,9 @@ class _MedicineReminderAppState extends State<MedicineReminderApp> {
       title: 'MedTrack',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const HomeScreen(),
+      initialRoute: '/',
+      onGenerateRoute: AppRoutes.generateRoute,
+      navigatorKey: NotificationService.navigatorKey,
     );
   }
 }
