@@ -2,15 +2,24 @@
 
 ## Screenshots
 
-### Home Screen
-<img src="assets/screenshots/homescreen.jpeg" alt="Home Screen" width="300" />
+<table>
+	<tr>
+		<td align="center">
+			<b>Home Screen</b><br>
+			<img src="assets/screenshots/homescreen.jpeg" alt="Home Screen" width="250" />
+		</td>
+		<td align="center">
+			<b>Home Screen with Items</b><br>
+			<img src="assets/screenshots/homescreenitems.jpeg" alt="Home Screen with Items" width="250" />
+		</td>
+	</tr>
+</table>
 
-### Home Screen with Items
-<img src="assets/screenshots/homescreenitems.jpeg" alt="Home Screen with Items" width="300" />
-
-### Add Medicine Screen
-<img src="assets/screenshots/addmedicine.jpeg" alt="Add Medicine Screen" width="300" />
-# <img src="assets/medtrack-app.png" alt="App Icon" width="80" height="80" align="left" />
+<p align="center">
+	<b>Add Medicine Screen</b><br>
+	<img src="assets/screenshots/addmedicine.jpeg" alt="Add Medicine Screen" width="250" />
+</p>
+<img src="assets/medtrack-app.png" alt="App Icon" width="80" height="80" align="left" />
 
 # MediTrack
 
@@ -54,32 +63,34 @@ flutter build apk
 The APK will be generated in the `build/app/outputs/flutter-apk/` directory.
 
 ## Folder Structure
-- `lib/` - Main application code
-	- `app/` - App entry and routing
-		- app.dart
-		- routes.dart
-	- `core/` - Theme and core utilities
-	- `models/` - Data models
-		- medicine_model.dart
-		- medicine_model.g.dart
-	- `screens/` - UI screens
-		- add_medicine_screen.dart
-		- alert_screen_ui.dart
-		- home_screen.dart
-		- `widgets/` - Reusable widgets
-			- empty_state.dart
-			- medicine_card.dart
-	- `services/` - Notification and storage services
-		- notification_service.dart
-		- storage_service.dart
-	- `utils/` - Constants and helpers
-		- constants.dart
-		- helper.dart
-	- `viewmodels/` - State management
-		- medicine_viewmodels.dart
-- `android/` - Android-specific files
-- `ios/` - iOS-specific files
-- `assets/` - Images and other assets
+```
+lib/
+├── app/
+│   ├── app.dart
+│   └── routes.dart
+├── core/
+├── models/
+│   ├── medicine_model.dart
+│   └── medicine_model.g.dart
+├── screens/
+│   ├── add_medicine_screen.dart
+│   ├── alert_screen_ui.dart
+│   ├── home_screen.dart
+│   └── widgets/
+│       ├── empty_state.dart
+│       └── medicine_card.dart
+├── services/
+│   ├── notification_service.dart
+│   └── storage_service.dart
+├── utils/
+│   ├── constants.dart
+│   └── helper.dart
+└── viewmodels/
+		└── medicine_viewmodels.dart
+android/         # Android-specific files
+ios/             # iOS-specific files
+assets/          # Images and other assets
+```
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
