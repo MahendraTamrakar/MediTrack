@@ -12,13 +12,14 @@
 			<b>Home Screen with Items</b><br>
 			<img src="assets/screenshots/homescreenitems.jpeg" alt="Home Screen with Items" width="250" />
 		</td>
+        <td align="center">
+			<b>Add Medicine Screen</b><br>
+	<img src="assets/screenshots/addmedicine.jpeg" alt="Add Medicine Screen" width="250" />
+		</td>
 	</tr>
 </table>
 
-<p align="center">
-	<b>Add Medicine Screen</b><br>
-	<img src="assets/screenshots/addmedicine.jpeg" alt="Add Medicine Screen" width="250" />
-</p>
+
 <img src="assets/medtrack-app.png" alt="App Icon" width="80" height="80" align="left" />
 
 # MediTrack
