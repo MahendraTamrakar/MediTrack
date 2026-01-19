@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:medtrack/app/routes.dart';
-import 'package:medtrack/screens/add_medicine_screen.dart';
 import 'package:medtrack/screens/widgets/empty_state.dart';
 import 'package:medtrack/screens/widgets/medicine_card.dart';
 import 'package:medtrack/utils/constants.dart';
