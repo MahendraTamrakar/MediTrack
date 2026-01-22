@@ -27,8 +27,9 @@
 MediTrack is a Flutter-based medicine reminder app that helps users manage their medication schedules efficiently. It provides notifications for scheduled medicines, allows users to add, edit, and delete medicines, and offers a clean, modern UI.
 
 ## Features
-- Add, edit, and delete medicines
+- Add and delete medicines
 - Schedule medicine reminders with notifications
+- Set medicine reminders for specific days of the week
 - Toggle medicine reminders on/off
 - Modern, responsive UI
 
@@ -56,12 +57,21 @@ MediTrack is a Flutter-based medicine reminder app that helps users manage their
 	flutter run
 	```
 
+
 ### Building APK
 To build the APK for Android:
 ```sh
 flutter build apk
 ```
 The APK will be generated in the `build/app/outputs/flutter-apk/` directory.
+
+---
+
+## Download APK
+
+You can directly download the latest APK file from the [`APK_file`](APK_file/) folder in this repository.
+
+---
 
 ## Folder Structure
 ```
