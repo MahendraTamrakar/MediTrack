@@ -20,21 +20,24 @@ class MedicineModel extends HiveObject {
   @HiveField(4)
   bool isActive;
 
+  /// Days of the week (1=Mon, 7=Sun)
+  @HiveField(5)
+  List<int> days;
+
   MedicineModel({
     required this.id,
     required this.name,
     required this.dose,
     required this.scheduledTime,
     this.isActive = true,
-  });
+    List<int>? days,
+  }) : days = days ?? [1, 2, 3, 4, 5, 6, 7]; // Default: Every day
 
   int compareTo(MedicineModel other) {
     final thisTime = TimeOfDay.fromDateTime(scheduledTime);
     final otherTime = TimeOfDay.fromDateTime(other.scheduledTime);
-    
     final thisMinutes = thisTime.hour * 60 + thisTime.minute;
     final otherMinutes = otherTime.hour * 60 + otherTime.minute;
-    
     return thisMinutes.compareTo(otherMinutes);
   }
 }

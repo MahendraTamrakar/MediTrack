@@ -78,11 +78,11 @@ class NotificationService {
     required String title,
     required String body,
     required DateTime dateTime,
+    int? dayOfWeek, // 1=Mon, ..., 7=Sun
   }) async {
     try {
-      debugPrint('═══════════════════════════════════════');
+    
       debugPrint('📅 SCHEDULING ALARM');
-      debugPrint('═══════════════════════════════════════');
 
       final now = DateTime.now();
       var scheduledTime = dateTime;
@@ -102,25 +102,20 @@ class NotificationService {
         _channelId,
         _channelName,
         channelDescription: _channelDescription,
-        
         importance: Importance.max,
         priority: Priority.max,
-        
         fullScreenIntent: true,
         category: AndroidNotificationCategory.alarm,
-        
         ticker: title,
         icon: '@mipmap/ic_launcher',
         color: const Color(0xFF008080),
-        
         playSound: true,
+        sound: RawResourceAndroidNotificationSound('alarm'),
         enableVibration: true,
         vibrationPattern: Int64List.fromList([0, 1000, 500, 1000, 500, 1000]),
-
         visibility: NotificationVisibility.public,
         autoCancel: false,
         ongoing: true,
-        
         actions: <AndroidNotificationAction>[
           const AndroidNotificationAction(
             _actionStop,
@@ -135,7 +130,6 @@ class NotificationService {
             cancelNotification: true,
           ),
         ],
-        
         styleInformation: BigTextStyleInformation(
           body,
           contentTitle: title,
@@ -152,7 +146,7 @@ class NotificationService {
         tzScheduledTime,
         details,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        matchDateTimeComponents: DateTimeComponents.time,
+        matchDateTimeComponents: dayOfWeek != null ? DateTimeComponents.dayOfWeekAndTime : DateTimeComponents.time,
         payload: '$id|$title|$body|${_formatTime(dateTime)}',
       );
 

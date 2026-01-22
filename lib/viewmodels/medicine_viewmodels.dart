@@ -22,13 +22,18 @@ class MedicineViewModel extends ChangeNotifier {
     return int.parse(id) % 2147483647;
   }
 
-  // ---------------- LOAD ----------------
   Future<void> loadMedicines() async {
     try {
       _isLoading = true;
       notifyListeners();
 
       _medicines = await _storageService.getAllMedicines();
+      // Backward compatibility: ensure days is set
+      for (final med in _medicines) {
+        if (med.days == null || med.days.isEmpty) {
+          med.days = [1, 2, 3, 4, 5, 6, 7];
+        }
+      }
       _medicines.sort((a, b) => a.compareTo(b));
 
       _isLoading = false;
@@ -40,31 +45,36 @@ class MedicineViewModel extends ChangeNotifier {
     }
   }
 
-  // ---------------- ADD ----------------
   Future<bool> addMedicine({
     required String name,
     required String dose,
     required DateTime scheduledTime,
+    required List<int> days,
   }) async {
     try {
-      final randomId =
-          DateTime.now().microsecondsSinceEpoch % 2147483647;
+      final randomId = DateTime.now().microsecondsSinceEpoch % 2147483647;
 
       final medicine = MedicineModel(
         id: randomId.toString(),
         name: name,
         dose: dose,
         scheduledTime: scheduledTime,
+        days: days,
       );
 
       await _storageService.saveMedicine(medicine);
 
-      await NotificationService.scheduleMedicineAlarm(
-        id: _getSafeNotificationId(medicine.id),
-        title: 'Medicine Reminder',
-        body: '${medicine.name} - ${medicine.dose}',
-        dateTime: medicine.scheduledTime,
-      );
+      // Schedule notification for each selected day
+      for (final day in days) {
+        final id = _getSafeNotificationId(medicine.id + day.toString());
+        await NotificationService.scheduleMedicineAlarm(
+          id: id,
+          title: 'Medicine Reminder',
+          body: '${medicine.name} - ${medicine.dose}',
+          dateTime: _nextDateForDay(scheduledTime, day),
+          dayOfWeek: day,
+        );
+      }
 
       await loadMedicines();
       return true;
@@ -75,14 +85,26 @@ class MedicineViewModel extends ChangeNotifier {
     }
   }
 
-  // ---------------- DELETE ----------------
+  // Helper to get next DateTime for a given weekday (1=Mon, ..., 7=Sun)
+  DateTime _nextDateForDay(DateTime base, int weekday) {
+    final now = DateTime.now();
+    int daysAhead = weekday - now.weekday;
+    if (daysAhead < 0) daysAhead += 7;
+    final next = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      base.hour,
+      base.minute,
+    ).add(Duration(days: daysAhead));
+    return next;
+  }
+
   Future<void> deleteMedicine(String id) async {
     try {
       await _storageService.deleteMedicine(id);
 
-      await NotificationService.cancelAlarm(
-        _getSafeNotificationId(id),
-      );
+      await NotificationService.cancelAlarm(_getSafeNotificationId(id));
 
       await loadMedicines();
     } catch (e) {
@@ -91,7 +113,6 @@ class MedicineViewModel extends ChangeNotifier {
     }
   }
 
-  // ---------------- TOGGLE ----------------
   Future<void> toggleMedicine(String id) async {
     try {
       final medicine = _medicines.firstWhere((m) => m.id == id);
@@ -119,16 +140,13 @@ class MedicineViewModel extends ChangeNotifier {
     }
   }
 
-  // ---------------- SNOOZE ----------------
   Future<void> snoozeMedicine(String id, {int snoozeMinutes = 10}) async {
     try {
       final medicine = _medicines.firstWhere((m) => m.id == id);
 
-      final snoozeTime =
-          DateTime.now().add(Duration(minutes: snoozeMinutes));
+      final snoozeTime = DateTime.now().add(Duration(minutes: snoozeMinutes));
 
-      final snoozeId =
-          DateTime.now().microsecondsSinceEpoch % 2147483647;
+      final snoozeId = DateTime.now().microsecondsSinceEpoch % 2147483647;
 
       await NotificationService.scheduleMedicineAlarm(
         id: snoozeId,
@@ -141,7 +159,6 @@ class MedicineViewModel extends ChangeNotifier {
     }
   }
 
-  // ---------------- TEST ALARM ----------------
   Future<void> testAlarm() async {
     final testTime = DateTime.now().add(const Duration(seconds: 5));
 

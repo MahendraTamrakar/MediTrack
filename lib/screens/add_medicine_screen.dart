@@ -11,12 +11,16 @@ class AddMedicineScreen extends StatefulWidget {
   State<AddMedicineScreen> createState() => _AddMedicineScreenState();
 }
 
+
 class _AddMedicineScreenState extends State<AddMedicineScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _doseController = TextEditingController();
   TimeOfDay _selectedTime = TimeOfDay.now();
   bool _isSaving = false;
+
+  // Days of week selection (1=Mon, ..., 7=Sun)
+  List<int> _selectedDays = [1, 2, 3, 4, 5, 6, 7];
 
   @override
   void dispose() {
@@ -52,46 +56,50 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   }
 
   Future<void> _saveMedicine() async {
-  if (!_formKey.currentState!.validate()) {
-    return;
-  }
-
-  setState(() {
-    _isSaving = true;
-  });
-
-  final viewModel = context.read<MedicineViewModel>();
-  final scheduledTime = DateTimeHelper.combineDateAndTime(
-    DateTime.now(),
-    _selectedTime,
-  );
-
-  debugPrint('🕐 Scheduling medicine for: $scheduledTime');
-  debugPrint('🕐 Current time: ${DateTime.now()}');
-  debugPrint('🕐 Time difference: ${scheduledTime.difference(DateTime.now()).inMinutes} minutes');
-
-  final success = await viewModel.addMedicine(
-    name: _nameController.text.trim(),
-    dose: _doseController.text.trim(),
-    scheduledTime: scheduledTime,
-  );
-
-  setState(() {
-    _isSaving = false;
-  });
-
-  if (success && mounted) {
-    Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '✅ Alarm set for ${_selectedTime.format(context)}',
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+    if (_selectedDays.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select at least one day.'),
+          backgroundColor: Colors.red,
         ),
-        backgroundColor: AppColors.primaryTeal,
-      ),
+      );
+      return;
+    }
+    setState(() {
+      _isSaving = true;
+    });
+    final viewModel = context.read<MedicineViewModel>();
+    final scheduledTime = DateTimeHelper.combineDateAndTime(
+      DateTime.now(),
+      _selectedTime,
     );
+    debugPrint('🕐 Scheduling medicine for: $scheduledTime');
+    debugPrint('🕐 Current time: ${DateTime.now()}');
+    debugPrint('🕐 Time difference: ${scheduledTime.difference(DateTime.now()).inMinutes} minutes');
+    final success = await viewModel.addMedicine(
+      name: _nameController.text.trim(),
+      dose: _doseController.text.trim(),
+      scheduledTime: scheduledTime,
+      days: _selectedDays,
+    );
+    setState(() {
+      _isSaving = false;
+    });
+    if (success && mounted) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '✅ Alarm set for ${_selectedTime.format(context)}',
+          ),
+          backgroundColor: AppColors.primaryTeal,
+        ),
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +116,69 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
+              // Days of the Week selection
+              Text('Days of the Week', style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 8),
+              Wrap(
+                spacing: 6,
+                children: List.generate(7, (index) {
+                  final dayNum = index + 1;
+                  final dayAbbr = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][index];
+                  final isSelected = _selectedDays.contains(dayNum);
+                  return ChoiceChip(
+                    label: Text(dayAbbr),
+                    side: BorderSide.none,
+                    selected: isSelected,
+                    selectedColor: AppColors.primaryTeal,
+                    backgroundColor: Colors.grey[200],
+                    labelStyle: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    onSelected: (selected) {
+                      setState(() {
+                        if (selected) {
+                          _selectedDays.add(dayNum);
+                        } else {
+                          _selectedDays.remove(dayNum);
+                        }
+                        // Keep unique and sorted
+                        _selectedDays = _selectedDays.toSet().toList()..sort();
+                      });
+                    },
+                  );
+                }),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedDays = [1, 2, 3, 4, 5, 6, 7];
+                      });
+                    },
+                    child: const Text('Select All'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedDays = [1, 2, 3, 4, 5];
+                      });
+                    },
+                    child: const Text('Weekdays'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedDays = [6, 7];
+                      });
+                    },
+                    child: const Text('Weekends'),
+                  ),
+                ],
+              ),
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(

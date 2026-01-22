@@ -51,6 +51,13 @@ class MedicineCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
+            Text(
+              _daysDisplay(medicine.days),
+              style: const TextStyle(
+                color: AppColors.grey,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
         trailing: Row(
@@ -91,4 +98,18 @@ class MedicineCard extends StatelessWidget {
       ),
     );
   }
+  // Helper to display days as string
+  String _daysDisplay(List<int> days) {
+    if (days.length == 7) return 'Every Day';
+    if (_isWeekdays(days)) return 'Weekdays';
+    if (_isWeekends(days)) return 'Weekends';
+    const abbr = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    final sortedDays = List<int>.from(days)..sort();
+    return sortedDays
+        .map((d) => abbr[d - 1])
+        .join(', ');
+  }
+
+  bool _isWeekdays(List<int> days) => days.toSet().containsAll([1,2,3,4,5]) && days.length == 5;
+  bool _isWeekends(List<int> days) => days.toSet().containsAll([6,7]) && days.length == 2;
 }

@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'MediTrack',
+          'MedTrack',
           style: TextStyle(fontFamily: 'cursive', fontWeight: FontWeight.w800, fontSize: 26),
         ),
       ),

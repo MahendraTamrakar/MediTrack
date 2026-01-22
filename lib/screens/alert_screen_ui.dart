@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:medtrack/services/notification_service.dart';
 import 'package:medtrack/utils/constants.dart';
 
@@ -40,31 +43,37 @@ class _AlarmScreenUIState extends State<AlarmScreenUI>
   }
 
   Future<void> _stopAlarm() async {
-
     await NotificationService.cancelAlarm(widget.notificationId);
 
     if (mounted) {
       Navigator.of(context).pop();
+      await Future.delayed(const Duration(milliseconds: 250));
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      }
     }
   }
 
   Future<void> _snoozeAlarm() async {
-
     await NotificationService.snoozeAlarm(
       widget.notificationId,
       widget.medicineName,
       widget.dose,
       snoozeMinutes: 10,
     );
- 
+
     if (mounted) {
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
+      await Future.delayed(const Duration(milliseconds: 300));
+      if (Platform.isAndroid) {
+        SystemNavigator.pop();
+      }
+      /* ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('⏰ Snoozed for 10 minutes'),
           duration: Duration(seconds: 2),
         ),
-      );
+      ); */
     }
   }
 
@@ -101,14 +110,13 @@ class _AlarmScreenUIState extends State<AlarmScreenUI>
                       child: Padding(
                         padding: const EdgeInsets.all(26.0),
                         child: Image.asset('assets/medicine.png'),
-                      )
+                      ),
                     ),
                   );
                 },
               ),
 
               const SizedBox(height: 60),
-
 
               Text(
                 widget.time,
@@ -134,7 +142,6 @@ class _AlarmScreenUIState extends State<AlarmScreenUI>
 
               const SizedBox(height: 12),
 
-
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
@@ -156,13 +163,9 @@ class _AlarmScreenUIState extends State<AlarmScreenUI>
 
               const SizedBox(height: 30),
 
-
               const Text(
                 '💊 Time to take your medicine',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white70,
-                ),
+                style: TextStyle(fontSize: 18, color: Colors.white70),
                 textAlign: TextAlign.center,
               ),
 
